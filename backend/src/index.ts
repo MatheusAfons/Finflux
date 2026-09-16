@@ -7,15 +7,55 @@ import { parseCartaoCredito } from "./parsers/cartaoCredito";
 import { parseDividas } from "./parsers/dividas";
 import { parseAssinaturas } from "./parsers/assinaturas";
 import { parseAReceber } from "./parsers/aReceber";
+import { detectarTipo } from "./parsers/detectar";
+import type { LancamentoNormalizado } from "./parsers/receitas";
 
 
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 app.use(express.json());
 const PORT = 3001;
+const parsersPorTipo: Record<string, (csv: string) => LancamentoNormalizado[]> = {
+  "receitas": parseReceitas,
+  "gastos-fixos": parseGastosFixos,
+  "cartao-credito": parseCartaoCredito,
+  "dividas": parseDividas,
+  "assinaturas": parseAssinaturas,
+  "a-receber": parseAReceber,
+};
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
+});
+
+app.post("/importar", upload.single("arquivo"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ erro: "Nenhum arquivo enviado" });
+  }
+
+  const csvText = req.file.buffer.toString("utf-8");
+  const tipo = detectarTipo(csvText);
+
+  if (!tipo) {
+    return res.status(400).json({ erro: "Não foi possível identificar o tipo de planilha" });
+  }
+
+  const parser = parsersPorTipo[tipo];
+  if (!parser) {
+    return res.status(400).json({ erro: "Parser não encontrado para esse tipo" });
+  }
+  const lancamentos = parser(csvText);
+  const stmt = db.prepare(
+    "INSERT INTO lancamentos (descricao, valor, tipo, categoria, data) VALUES (?, ?, ?, ?, ?)"
+  );
+  const inserirTodos = db.transaction((items: typeof lancamentos) => {
+    for (const item of items) {
+      stmt.run(item.descricao, item.valor, item.tipo, item.categoria, item.data);
+    }
+  });
+  inserirTodos(lancamentos);
+
+  res.json({ tipoDetectado: tipo, importados: lancamentos.length });
 });
 
 app.post("/lancamentos", (req, res) => {

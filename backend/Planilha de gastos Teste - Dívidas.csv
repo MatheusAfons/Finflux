@@ -1,0 +1,7 @@
+Dívidas,,,,
+,,,,
+Dívida,Parcela,Vencimento,Valor,Pago
+Empréstimo Teste,1,Setembro,"R$ 200,00",Pago
+Empréstimo Teste,2,Outubro,"R$ 200,00",PENDENTE
+Financiamento Teste,10/24,15/09/2026,"R$ 350,00",Pago
+Financiamento Teste,11/24,15/10/2026,"R$ 350,00",PENDENTE

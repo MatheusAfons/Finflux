@@ -9,7 +9,7 @@ db.exec(`
     valor REAL NOT NULL,
     tipo TEXT NOT NULL,
     categoria TEXT,
-    data TEXT NOT NULL
+    data TEXT
   )
 `);
 

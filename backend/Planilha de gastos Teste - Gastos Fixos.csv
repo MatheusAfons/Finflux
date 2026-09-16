@@ -1,0 +1,12 @@
+Gastos Fixos - Teste,,,,
+,,,,
+Categoria,Forma de Pagamento,Vencimento,Valor,Status
+Moradia,,,,
+Aluguel,Pix,05/09/2026,"R$ 1.200,00",Pago
+Energia,Pix,15/09/2026,"R$ 150,00",Pago
+Água,-,-,-,Não
+Internet,Crédito,10/09/2026,"R$ 100,00",Pago
+,,,,
+Streaming,,,,
+Serviço A,Débito em conta,20/09/2026,"R$ 39,90",Pago
+Serviço B,-,-,-,-

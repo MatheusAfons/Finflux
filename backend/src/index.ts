@@ -5,6 +5,7 @@ import { parseReceitas } from "./parsers/receitas";
 import { parseGastosFixos } from "./parsers/gastosFixos";
 import { parseCartaoCredito } from "./parsers/cartaoCredito";
 import { parseDividas } from "./parsers/dividas";
+import { parseAssinaturas } from "./parsers/assinaturas";
 
 
 
@@ -97,6 +98,27 @@ app.post("/importar/dividas", upload.single("arquivo"), (req, res) => {
 
   const csvText = req.file.buffer.toString("utf-8");
   const lancamentos = parseDividas(csvText);
+
+  const stmt = db.prepare(
+    "INSERT INTO lancamentos (descricao, valor, tipo, categoria, data) VALUES (?, ?, ?, ?, ?)"
+  );
+  const inserirTodos = db.transaction((items: typeof lancamentos) => {
+    for (const item of items) {
+      stmt.run(item.descricao, item.valor, item.tipo, item.categoria, item.data);
+    }
+  });
+  inserirTodos(lancamentos);
+
+  res.json({ importados: lancamentos.length });
+});
+
+app.post("/importar/assinaturas", upload.single("arquivo"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ erro: "Nenhum arquivo enviado" });
+  }
+
+  const csvText = req.file.buffer.toString("utf-8");
+  const lancamentos = parseAssinaturas(csvText);
 
   const stmt = db.prepare(
     "INSERT INTO lancamentos (descricao, valor, tipo, categoria, data) VALUES (?, ?, ?, ?, ?)"

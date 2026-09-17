@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { buscarLancamentos, type Lancamento } from "./services/api";
+import { ImportarCsv } from "./components/ImportarCsv";
 
 function App() {
   
@@ -11,6 +12,13 @@ function App() {
       .then(setLancamentos)
       .finally(() => setCarregando(false));
   }, []);
+
+  function recarregar() {
+  setCarregando(true);
+  buscarLancamentos()
+    .then(setLancamentos)
+    .finally(() => setCarregando(false));
+}
 
   const receitas = lancamentos
     .filter((l) => l.tipo === "receita")
@@ -29,6 +37,10 @@ function App() {
   return (
     <div className="min-h-screen bg-neutral-950 p-8 text-white">
       <h1 className="text-2xl font-bold mb-6">Seu dinheiro, em movimento</h1>
+
+       <div className="mb-6">
+        <ImportarCsv aoImportar={recarregar} />
+      </div>
 
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-neutral-900 rounded-xl p-4">

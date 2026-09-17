@@ -17,3 +17,10 @@ export async function buscarLancamentos(): Promise<Lancamento[]> {
   const res = await api.get<Lancamento[]>("/lancamentos");
   return res.data;
 }
+
+export async function importarCsv(arquivo: File): Promise<{ tipoDetectado: string; importados: number }> {
+  const formData = new FormData();
+  formData.append("arquivo", arquivo);
+  const res = await api.post("/importar", formData);
+  return res.data;
+}

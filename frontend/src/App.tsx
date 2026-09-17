@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { buscarLancamentos, type Lancamento } from "./services/api";
 import { ImportarCsv } from "./components/ImportarCsv";
 import { ListaLancamentos } from "./components/ListaLancamentos";
-
+import { EvolucaoSaldo } from "./components/EvolucaoSaldo";
 
 function App() {
 
@@ -60,6 +60,9 @@ function App() {
 
         <div className="mt-6">
           <ListaLancamentos lancamentos={lancamentos} />
+        </div>
+        <div className="mt-6">
+          <EvolucaoSaldo lancamentos={lancamentos} />
         </div>
       </div>
     </div>

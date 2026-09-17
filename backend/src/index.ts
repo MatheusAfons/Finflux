@@ -9,9 +9,11 @@ import { parseAssinaturas } from "./parsers/assinaturas";
 import { parseAReceber } from "./parsers/aReceber";
 import { detectarTipo } from "./parsers/detectar";
 import type { LancamentoNormalizado } from "./parsers/receitas";
+import cors from "cors";
 
 
 const app = express();
+app.use(cors());
 const upload = multer({ storage: multer.memoryStorage() });
 app.use(express.json());
 const PORT = 3001;
@@ -209,4 +211,3 @@ app.delete("/lancamentos", (req, res) => {
 });
 
 //Invoke-RestMethod -Uri http://localhost:3001/lancamentos -Method Delete//
-

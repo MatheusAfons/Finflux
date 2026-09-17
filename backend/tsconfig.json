@@ -1,24 +1,26 @@
 {
+  "scripts": {
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "build": "tsc"
+  },
   "compilerOptions": {
     // File Layout
-    // "rootDir": "./src",
-    // "outDir": "./dist",
-
+    "rootDir": "./src",
+    "outDir": "./dist",
     // Environment Settings
     "module": "CommonJS",
     "target": "ES2020",
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "esModuleInterop": true,
-
     // Other Outputs
     "sourceMap": true,
-    "declaration":false,
+    "declaration": false,
     "declarationMap": false,
-
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
-
     // Recommended Options
     "strict": true,
     "verbatimModuleSyntax": false,

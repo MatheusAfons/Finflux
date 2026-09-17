@@ -10,10 +10,12 @@ import { parseAReceber } from "./parsers/aReceber";
 import { detectarTipo } from "./parsers/detectar";
 import type { LancamentoNormalizado } from "./parsers/receitas";
 import cors from "cors";
+import path from "path";
 
 
 const app = express();
 app.use(cors());
+app.use(express.static(path.join(__dirname, "../../frontend/dist")));
 const upload = multer({ storage: multer.memoryStorage() });
 app.use(express.json());
 const PORT = 3001;
@@ -203,6 +205,10 @@ app.get("/lancamentos", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
+});
+
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
 });
 
 app.delete("/lancamentos", (req, res) => {

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { buscarLancamentos, type Lancamento } from "./services/api";
 import { ImportarCsv } from "./components/ImportarCsv";
+import { ListaLancamentos } from "./components/ListaLancamentos";
+
 
 function App() {
-  
+
   const [lancamentos, setLancamentos] = useState<Lancamento[]>([]);
   const [carregando, setCarregando] = useState(true);
 
@@ -14,11 +16,11 @@ function App() {
   }, []);
 
   function recarregar() {
-  setCarregando(true);
-  buscarLancamentos()
-    .then(setLancamentos)
-    .finally(() => setCarregando(false));
-}
+    setCarregando(true);
+    buscarLancamentos()
+      .then(setLancamentos)
+      .finally(() => setCarregando(false));
+  }
 
   const receitas = lancamentos
     .filter((l) => l.tipo === "receita")
@@ -38,7 +40,7 @@ function App() {
     <div className="min-h-screen bg-neutral-950 p-8 text-white">
       <h1 className="text-2xl font-bold mb-6">Seu dinheiro, em movimento</h1>
 
-       <div className="mb-6">
+      <div className="mb-6">
         <ImportarCsv aoImportar={recarregar} />
       </div>
 
@@ -54,6 +56,10 @@ function App() {
         <div className="bg-neutral-900 rounded-xl p-4">
           <p className="text-sm text-neutral-400">Despesas</p>
           <p className="text-2xl font-bold text-red-400">R$ {despesas.toFixed(2)}</p>
+        </div>
+
+        <div className="mt-6">
+          <ListaLancamentos lancamentos={lancamentos} />
         </div>
       </div>
     </div>
